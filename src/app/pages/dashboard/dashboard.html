@@ -1,0 +1,125 @@
+<div class="dash">
+  <div class="top">
+    <div class="titles">
+      <h1>Dashboard</h1>
+      <p class="muted">Overview of cases, workload, and recent activity</p>
+    </div>
+
+    <div class="actions">
+      <a mat-raised-button color="primary" routerLink="/cases/new">New Case</a>
+      <a mat-stroked-button routerLink="/cases">All Cases</a>
+    </div>
+  </div>
+
+  <!-- KPI row -->
+  <div class="kpis">
+    <mat-card class="kpi">
+      <div class="kpi__head">
+        <div class="kpi__label">Total cases</div>
+      </div>
+      <div class="kpi__value">{{ stats.total }}</div>
+      <div class="kpi__hint">All cases in the system</div>
+    </mat-card>
+
+    <mat-card class="kpi kpi--open">
+      <div class="kpi__head">
+        <div class="kpi__label">Open</div>
+        <span class="dot dot--open"></span>
+      </div>
+      <div class="kpi__value">{{ stats.open }}</div>
+      <div class="kpi__hint">Needs assignment / triage</div>
+    </mat-card>
+
+    <mat-card class="kpi kpi--invest">
+      <div class="kpi__head">
+        <div class="kpi__label">Under investigation</div>
+        <span class="dot dot--invest"></span>
+      </div>
+      <div class="kpi__value">{{ stats.underInvestigation }}</div>
+      <div class="kpi__hint">Active work in progress</div>
+    </mat-card>
+
+    <mat-card class="kpi kpi--closed">
+      <div class="kpi__head">
+        <div class="kpi__label">Closed</div>
+        <span class="dot dot--closed"></span>
+      </div>
+      <div class="kpi__value">{{ stats.closed }}</div>
+      <div class="kpi__hint">Resolved & archived</div>
+    </mat-card>
+  </div>
+
+  <!-- Main grid -->
+  <div class="main">
+    <!-- Recent cases -->
+    <mat-card class="panel">
+      <div class="panel__head">
+        <div>
+          <h2>Recent cases</h2>
+          <p class="muted small">Latest reports and updates</p>
+        </div>
+        <a mat-button routerLink="/cases">Open list</a>
+      </div>
+
+      <div class="list">
+        <a class="row" *ngFor="let r of recent" [routerLink]="['/cases', r.id]">
+          <div class="left">
+            <div class="id">{{ r.id }}</div>
+            <div class="title">{{ r.title }}</div>
+          </div>
+
+          <div class="right">
+            <span class="badge" [class.badge--open]="r.status==='OPEN'"
+                  [class.badge--invest]="r.status==='UNDER_INVESTIGATION'"
+                  [class.badge--closed]="r.status==='CLOSED'">
+              {{ r.status }}
+            </span>
+            <span class="area">{{ r.area }}</span>
+          </div>
+        </a>
+      </div>
+    </mat-card>
+
+    <!-- Quick insights -->
+    <mat-card class="panel">
+      <div class="panel__head">
+        <div>
+          <h2>Quick actions</h2>
+          <p class="muted small">Common operations</p>
+        </div>
+      </div>
+
+      <div class="quick">
+        <a class="quick__item" routerLink="/cases/new">
+          <div class="quick__title">Create a new case</div>
+          <div class="muted small">Register an incident report</div>
+        </a>
+
+        <a class="quick__item" routerLink="/cases">
+          <div class="quick__title">Search cases</div>
+          <div class="muted small">Filter by status/area/type</div>
+        </a>
+
+        <div class="quick__item quick__item--disabled">
+          <div class="quick__title">Generate report</div>
+          <div class="muted small">Coming after API integration</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="mini">
+        <div class="mini__title">Today</div>
+        <div class="mini__row">
+          <div class="mini__k">New</div><div class="mini__v">6</div>
+        </div>
+        <div class="mini__row">
+          <div class="mini__k">Updated</div><div class="mini__v">14</div>
+        </div>
+        <div class="mini__row">
+          <div class="mini__k">Closed</div><div class="mini__v">2</div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

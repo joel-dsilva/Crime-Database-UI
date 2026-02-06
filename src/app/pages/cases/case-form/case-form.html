@@ -1,0 +1,47 @@
+<mat-card class="card">
+  <h2>{{ isEdit ? 'Edit Case' : 'New Case' }}</h2>
+
+  <form class="grid" [formGroup]="form" (ngSubmit)="save()">
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Type</mat-label>
+      <input matInput formControlName="type" placeholder="Theft, Assault..." />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="OPEN">OPEN</mat-option>
+        <mat-option value="UNDER_INVESTIGATION">UNDER_INVESTIGATION</mat-option>
+        <mat-option value="CLOSED">CLOSED</mat-option>
+        <mat-option value="ARCHIVED">ARCHIVED</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Severity (1-5)</mat-label>
+      <input matInput type="number" formControlName="severity" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Area</mat-label>
+      <input matInput formControlName="area" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Description</mat-label>
+      <textarea matInput rows="5" formControlName="description"></textarea>
+    </mat-form-field>
+
+    <div class="actions wide">
+      <button mat-raised-button color="primary" [disabled]="form.invalid">
+        {{ isEdit ? 'Update' : 'Create' }}
+      </button>
+      <a mat-button routerLink="/cases">Cancel</a>
+    </div>
+  </form>
+</mat-card>

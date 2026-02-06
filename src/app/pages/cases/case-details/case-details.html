@@ -1,0 +1,9 @@
+<mat-card class="card">
+  <h2>Case Details</h2>
+  <p class="muted">Case ID: {{ id }}</p>
+
+  <div class="actions">
+    <a mat-raised-button color="primary" [routerLink]="['/cases', id, 'edit']">Edit</a>
+    <a mat-button routerLink="/cases">Back to list</a>
+  </div>
+</mat-card>

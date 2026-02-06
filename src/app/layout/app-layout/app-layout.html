@@ -1,0 +1,62 @@
+<mat-sidenav-container class="shell">
+  <mat-sidenav class="sidenav" [opened]="opened" mode="side">
+    <div class="brand">
+      <div class="logo">🛡️</div>
+      <div class="brandText">
+        <div class="brandTitle">CrimeUI</div>
+        <div class="brandSub">Case Management</div>
+      </div>
+    </div>
+
+    <mat-nav-list class="nav">
+      <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+
+      <a mat-list-item routerLink="/cases" routerLinkActive="active">
+        <mat-icon>folder</mat-icon>
+        <span>Cases</span>
+      </a>
+
+      <a mat-list-item routerLink="/cases/new" routerLinkActive="active">
+        <mat-icon>add_circle</mat-icon>
+        <span>New Case</span>
+      </a>
+
+      <div class="spacer"></div>
+
+      <a mat-list-item routerLink="/login">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <mat-toolbar class="topbar">
+      <button mat-icon-button class="menuBtn" (click)="opened = !opened">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <div class="search">
+        <mat-icon class="searchIcon">search</mat-icon>
+        <input class="searchInput" placeholder="Search cases, IDs, areas..." />
+      </div>
+
+      <span class="grow"></span>
+
+      <div class="userChip">
+        <div class="avatar">JD</div>
+        <div class="userMeta">
+          <div class="name">Officer</div>
+          <div class="role">Analyst</div>
+        </div>
+      </div>
+    </mat-toolbar>
+
+    <main class="page">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
