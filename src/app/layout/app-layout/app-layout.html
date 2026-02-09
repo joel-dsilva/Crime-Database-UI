@@ -1,62 +1,86 @@
-<mat-sidenav-container class="shell">
-  <mat-sidenav class="sidenav" [opened]="opened" mode="side">
-    <div class="brand">
-      <div class="logo">🛡️</div>
-      <div class="brandText">
-        <div class="brandTitle">CrimeUI</div>
-        <div class="brandSub">Case Management</div>
+<div class="layout-container">
+  
+  <aside class="sidebar" [class.collapsed]="!isSidebarOpen">
+    
+    <div class="sidebar-header">
+      <div class="logo-box">
+        <mat-icon>local_police</mat-icon>
+      </div>
+      <div class="brand-info" *ngIf="isSidebarOpen">
+        <h1 class="app-name">CrimeUI</h1>
+        <span class="app-version">v2.4.0</span>
       </div>
     </div>
 
-    <mat-nav-list class="nav">
-      <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <mat-icon>dashboard</mat-icon>
-        <span>Dashboard</span>
-      </a>
+    <nav class="sidebar-nav">
+      
+      <div class="nav-section">
+        <span class="section-label" *ngIf="isSidebarOpen">MENU</span>
+        
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+          <mat-icon>grid_view</mat-icon>
+          <span *ngIf="isSidebarOpen">Dashboard</span>
+        </a>
 
-      <a mat-list-item routerLink="/cases" routerLinkActive="active">
-        <mat-icon>folder</mat-icon>
-        <span>Cases</span>
-      </a>
+        <a routerLink="/cases" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+          <mat-icon>folder_open</mat-icon>
+          <span *ngIf="isSidebarOpen">Case Files</span>
+        </a>
 
-      <a mat-list-item routerLink="/cases/new" routerLinkActive="active">
-        <mat-icon>add_circle</mat-icon>
-        <span>New Case</span>
-      </a>
-
-      <div class="spacer"></div>
-
-      <a mat-list-item routerLink="/login">
-        <mat-icon>logout</mat-icon>
-        <span>Logout</span>
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content class="content">
-    <mat-toolbar class="topbar">
-      <button mat-icon-button class="menuBtn" (click)="opened = !opened">
-        <mat-icon>menu</mat-icon>
-      </button>
-
-      <div class="search">
-        <mat-icon class="searchIcon">search</mat-icon>
-        <input class="searchInput" placeholder="Search cases, IDs, areas..." />
+        <a routerLink="/cases/new" routerLinkActive="active" class="nav-link">
+          <mat-icon>add_box</mat-icon>
+          <span *ngIf="isSidebarOpen">New Report</span>
+        </a>
       </div>
 
-      <span class="grow"></span>
+      <div class="nav-section mt-auto">
+        <a routerLink="/settings" class="nav-link">
+          <mat-icon>settings</mat-icon>
+          <span *ngIf="isSidebarOpen">Settings</span>
+        </a>
+        
+        <a routerLink="/login" class="nav-link logout">
+          <mat-icon>logout</mat-icon>
+          <span *ngIf="isSidebarOpen">Sign Out</span>
+        </a>
+      </div>
 
-      <div class="userChip">
-        <div class="avatar">JD</div>
-        <div class="userMeta">
-          <div class="name">Officer</div>
-          <div class="role">Analyst</div>
+    </nav>
+  </aside>
+
+  <div class="main-wrapper">
+    
+    <header class="topbar">
+      <div class="left-actions">
+        <button mat-icon-button (click)="toggleSidebar()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <h2 class="page-title">Overview</h2>
+      </div>
+
+      <div class="search-bar">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Search for cases, suspects, or IDs...">
+      </div>
+
+      <div class="right-actions">
+        <button mat-icon-button>
+          <mat-icon>notifications</mat-icon>
+        </button>
+        
+        <div class="user-profile">
+          <div class="user-info">
+            <span class="name">Det. J. Silva</span>
+            <span class="role">Admin</span>
+          </div>
+          <div class="avatar">JS</div>
         </div>
       </div>
-    </mat-toolbar>
+    </header>
 
-    <main class="page">
+    <main class="content-area">
       <router-outlet></router-outlet>
     </main>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+
+  </div>
+</div>

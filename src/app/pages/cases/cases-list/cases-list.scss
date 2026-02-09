@@ -1,125 +1,162 @@
-.wrap {
+// Variables for consistent colors
+$primary-color: #3f51b5;
+$bg-color: #f5f7fa;
+$text-color: #333;
+$muted-color: #666;
+
+:host {
+  display: block;
+  background-color: $bg-color;
+  min-height: 100%;
+  padding: 24px;
+}
+
+.cases-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
-.head {
+// --- Header Section ---
+.header {
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 500;
+    color: $text-color;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+
+  button {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
 }
 
-h1 {
-  margin: 0;
-  font-size: 30px;
-  letter-spacing: -0.4px;
+// --- Loading Spinner ---
+.loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
 }
 
-.muted {
-  opacity: 0.7;
-  margin: 6px 0 0;
-}
-
-.sub {
-  font-size: 12px;
-  margin-top: 2px;
-}
-
-.card {
-  border-radius: 18px;
-  padding: 12px;
-}
-
-.filters {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.wide {
-  width: 100%;
-}
-
-.tableWrap {
-  overflow: auto;
-  border-radius: 14px;
-}
-
-.table {
+// --- Table Styles ---
+table {
   width: 100%;
   background: white;
-  border-radius: 14px;
+  border-radius: 8px;
+  overflow: hidden; // Keeps corners rounded
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  // Header Styling
+  th.mat-header-cell {
+    background-color: #fafafa;
+    color: $muted-color;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 16px;
+    border-bottom: 2px solid #eee;
+  }
+
+  // Row Styling
+  td.mat-cell {
+    padding: 16px;
+    color: $text-color;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+
+    // Specific Column Tweaks
+    &.mat-column-id {
+      font-family: 'Roboto Mono', monospace;
+      color: $muted-color;
+      width: 80px;
+    }
+
+    &.mat-column-title {
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+
+    &.mat-column-actions {
+      width: 60px;
+      text-align: right;
+    }
+  }
+
+  // Row Hover Effect
+  tr.mat-row {
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f9faff; // Light blue tint on hover
+    }
+  }
 }
 
-th {
+// --- Status Badges ---
+// We target the span inside the status column
+.mat-column-status span {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 11px;
   font-weight: 700;
-  opacity: 0.75;
-}
-
-.link {
-  text-decoration: none;
-  font-weight: 800;
-}
-.link:hover {
-  text-decoration: underline;
-}
-
-.titleCell {
-  display: flex;
-  flex-direction: column;
-}
-.titleText {
-  font-weight: 700;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  background: rgba(0, 0, 0, 0.06);
-}
-
-.badge--open {
-  background: rgba(239, 68, 68, 0.14);
-}
-.badge--invest {
-  background: rgba(245, 158, 11, 0.18);
-}
-.badge--closed {
-  background: rgba(34, 197, 94, 0.16);
-}
-
-.prio {
-  font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.04);
-}
-
-.actions {
-  white-space: nowrap;
-}
-
-.empty {
-  padding: 22px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 80px;
   text-align: center;
 }
 
-.emptyTitle {
-  font-weight: 800;
-  font-size: 16px;
-  margin-bottom: 4px;
+// Dynamic styles based on text color injected in HTML
+// (This is a fallback if you want CSS-only control)
+span[style*="red"] {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #d32f2f !important;
 }
 
-@media (max-width: 900px) {
-  .filters {
-    grid-template-columns: 1fr;
+span[style*="green"] {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #388e3c !important;
+}
+
+// --- Animations ---
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// --- Responsive Design ---
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    
+    button {
+      width: 100%;
+    }
+  }
+
+  // Hide less important columns on mobile
+  .mat-column-location, 
+  .mat-column-officer {
+    display: none;
   }
 }

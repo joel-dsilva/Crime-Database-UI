@@ -1,0 +1,156 @@
+$primary: #3f51b5;
+$bg-color: #f5f7fa;
+
+:host {
+  display: block;
+  background-color: $bg-color;
+  min-height: 100vh;
+  padding: 32px;
+}
+
+.details-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+// --- Header ---
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+
+  .breadcrumb {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    
+    a {
+      text-decoration: none;
+      color: #666;
+      &:hover { color: $primary; text-decoration: underline; }
+    }
+  }
+
+  h1 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+  }
+}
+
+// --- Card Layout ---
+.main-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  background: white;
+  padding: 0; 
+  overflow: hidden;
+
+  mat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    background: #fff;
+  }
+  
+  mat-card-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  mat-divider {
+    border-top-color: #eee;
+  }
+
+  mat-card-content {
+    padding: 24px;
+  }
+}
+
+// --- Status Badge ---
+.status-badge {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.open {
+    background: rgba(239, 68, 68, 0.1);
+    color: #d32f2f;
+  }
+  &.under_investigation {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+  }
+  &.closed {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+  }
+}
+
+// --- Information Rows ---
+.info-row {
+  display: flex;
+  margin-bottom: 20px;
+  align-items: center;
+
+  .label {
+    width: 150px;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .value {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+  }
+
+  .officer-value {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    mat-icon { font-size: 20px; color: #666; }
+  }
+}
+
+.description-section {
+  margin-top: 32px;
+  
+  .label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .description-text {
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+    line-height: 1.6;
+    color: #444;
+    border: 1px solid #eee;
+  }
+}
+
+// --- Loading & Empty ---
+.loading-shade, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+}

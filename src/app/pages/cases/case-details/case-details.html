@@ -1,9 +1,69 @@
-<mat-card class="card">
-  <h2>Case Details</h2>
-  <p class="muted">Case ID: {{ id }}</p>
-
-  <div class="actions">
-    <a mat-raised-button color="primary" [routerLink]="['/cases', id, 'edit']">Edit</a>
-    <a mat-button routerLink="/cases">Back to list</a>
+<div class="details-container">
+  
+  <div *ngIf="isLoading" class="loading-shade">
+    <mat-spinner diameter="40"></mat-spinner>
   </div>
-</mat-card>
+
+  <div *ngIf="!isLoading && case" class="content-fade-in">
+    <header class="page-header">
+      <div class="title-group">
+        <div class="breadcrumb">
+          <a routerLink="/cases">Cases</a> / <span>{{case.id}}</span>
+        </div>
+        <h1>{{ case.title }}</h1>
+      </div>
+
+      <div class="actions">
+        <button mat-stroked-button routerLink="/cases">
+          Back
+        </button>
+        <button mat-flat-button color="primary" [routerLink]="['/cases', case.id, 'edit']">
+          <mat-icon>edit</mat-icon> Edit Case
+        </button>
+      </div>
+    </header>
+
+    <div class="details-grid">
+      <mat-card class="main-card">
+        <mat-card-header>
+          <mat-card-title>Case Information</mat-card-title>
+          <div class="status-badge" [ngClass]="case.status.toLowerCase()">
+            {{ case.status }}
+          </div>
+        </mat-card-header>
+        
+        <mat-divider></mat-divider>
+        
+        <mat-card-content>
+          <div class="info-row">
+            <div class="label">Location</div>
+            <div class="value">{{ case.location }}</div>
+          </div>
+          
+          <div class="info-row">
+            <div class="label">Assigned Officer</div>
+            <div class="value officer-value">
+              <mat-icon inline>person</mat-icon> 
+              {{ case.officer_assigned || 'Unassigned' }}
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="label">Reported Date</div>
+            <div class="value">{{ case.created_at | date:'mediumDate' }}</div>
+          </div>
+
+          <div class="description-section">
+            <div class="label">Description</div>
+            <p class="description-text">{{ case.description }}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !case" class="empty-state">
+    <h3>Case not found</h3>
+    <button mat-button routerLink="/cases">Go back to list</button>
+  </div>
+</div>

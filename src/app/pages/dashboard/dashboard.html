@@ -1,125 +1,113 @@
-<div class="dash">
-  <div class="top">
-    <div class="titles">
+<div class="dashboard-container">
+  
+  <header class="page-header">
+    <div class="header-content">
       <h1>Dashboard</h1>
-      <p class="muted">Overview of cases, workload, and recent activity</p>
+      <p class="subtitle">Overview of cases, workload, and recent activity</p>
+    </div>
+    <div class="header-actions">
+      <button mat-flat-button color="primary" routerLink="/cases/new">New Case</button>
+      <button mat-stroked-button routerLink="/cases">All Cases</button>
+    </div>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Total cases</span>
+      </div>
+      <div class="stat-value">{{ stats.total }}</div>
+      <div class="stat-desc">All cases in the system</div>
     </div>
 
-    <div class="actions">
-      <a mat-raised-button color="primary" routerLink="/cases/new">New Case</a>
-      <a mat-stroked-button routerLink="/cases">All Cases</a>
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Open</span>
+        <div class="status-dot open"></div>
+      </div>
+      <div class="stat-value">{{ stats.open }}</div>
+      <div class="stat-desc">Needs assignment / triage</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Under investigation</span>
+        <div class="status-dot investigation"></div>
+      </div>
+    <div class="stat-value">{{ stats.investigating }}</div>
+      <div class="stat-desc">Active work in progress</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Closed</span>
+        <div class="status-dot closed"></div>
+      </div>
+      <div class="stat-value">{{ stats.closed }}</div>
+      <div class="stat-desc">Resolved & archived</div>
     </div>
   </div>
 
-  <!-- KPI row -->
-  <div class="kpis">
-    <mat-card class="kpi">
-      <div class="kpi__head">
-        <div class="kpi__label">Total cases</div>
-      </div>
-      <div class="kpi__value">{{ stats.total }}</div>
-      <div class="kpi__hint">All cases in the system</div>
-    </mat-card>
-
-    <mat-card class="kpi kpi--open">
-      <div class="kpi__head">
-        <div class="kpi__label">Open</div>
-        <span class="dot dot--open"></span>
-      </div>
-      <div class="kpi__value">{{ stats.open }}</div>
-      <div class="kpi__hint">Needs assignment / triage</div>
-    </mat-card>
-
-    <mat-card class="kpi kpi--invest">
-      <div class="kpi__head">
-        <div class="kpi__label">Under investigation</div>
-        <span class="dot dot--invest"></span>
-      </div>
-      <div class="kpi__value">{{ stats.underInvestigation }}</div>
-      <div class="kpi__hint">Active work in progress</div>
-    </mat-card>
-
-    <mat-card class="kpi kpi--closed">
-      <div class="kpi__head">
-        <div class="kpi__label">Closed</div>
-        <span class="dot dot--closed"></span>
-      </div>
-      <div class="kpi__value">{{ stats.closed }}</div>
-      <div class="kpi__hint">Resolved & archived</div>
-    </mat-card>
-  </div>
-
-  <!-- Main grid -->
-  <div class="main">
-    <!-- Recent cases -->
-    <mat-card class="panel">
-      <div class="panel__head">
+  <div class="content-grid">
+    
+    <div class="recent-section">
+      <div class="section-header">
         <div>
           <h2>Recent cases</h2>
-          <p class="muted small">Latest reports and updates</p>
+          <p>Latest reports and updates</p>
         </div>
-        <a mat-button routerLink="/cases">Open list</a>
+        <a routerLink="/cases" class="link-btn">Open list</a>
       </div>
 
-      <div class="list">
-        <a class="row" *ngFor="let r of recent" [routerLink]="['/cases', r.id]">
-          <div class="left">
-            <div class="id">{{ r.id }}</div>
-            <div class="title">{{ r.title }}</div>
-          </div>
+      <div class="case-list">
+        <div *ngIf="isLoading" class="loading-state">
+          <mat-spinner diameter="30"></mat-spinner>
+        </div>
 
-          <div class="right">
-            <span class="badge" [class.badge--open]="r.status==='OPEN'"
-                  [class.badge--invest]="r.status==='UNDER_INVESTIGATION'"
-                  [class.badge--closed]="r.status==='CLOSED'">
-              {{ r.status }}
+          <div class="case-item" *ngFor="let case of recentCases" (click)="editCase(case.id || '')" style="cursor: pointer;">          <div class="case-info">
+            <span class="case-id">C-{{ case.id }}</span>
+            <span class="case-title">{{ case.title }}</span>
+          </div>
+          
+          <div class="case-meta">
+            <span class="status-badge" [ngClass]="case.status">
+              {{ case.status.replace('_', ' ') }}
             </span>
-            <span class="area">{{ r.area }}</span>
+            <span class="case-location">{{ case.location }}</span>
           </div>
-        </a>
-      </div>
-    </mat-card>
+        </div>
 
-    <!-- Quick insights -->
-    <mat-card class="panel">
-      <div class="panel__head">
+        <div *ngIf="!isLoading && recentCases.length === 0" class="empty-state">
+          No recent activity found.
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-section">
+      <div class="section-header">
         <div>
           <h2>Quick actions</h2>
-          <p class="muted small">Common operations</p>
+          <p>Common operations</p>
         </div>
       </div>
 
-      <div class="quick">
-        <a class="quick__item" routerLink="/cases/new">
-          <div class="quick__title">Create a new case</div>
-          <div class="muted small">Register an incident report</div>
-        </a>
+      <div class="action-list">
+        <div class="action-card" routerLink="/cases/new">
+          <h3>Create a new case</h3>
+          <p>Register an incident report</p>
+        </div>
 
-        <a class="quick__item" routerLink="/cases">
-          <div class="quick__title">Search cases</div>
-          <div class="muted small">Filter by status/area/type</div>
-        </a>
+        <div class="action-card" routerLink="/cases">
+          <h3>Search cases</h3>
+          <p>Filter by status/area/type</p>
+        </div>
 
-        <div class="quick__item quick__item--disabled">
-          <div class="quick__title">Generate report</div>
-          <div class="muted small">Coming after API integration</div>
+        <div class="action-card disabled">
+          <h3>Generate report</h3>
+          <p>Coming after API integration</p>
         </div>
       </div>
+    </div>
 
-      <div class="divider"></div>
-
-      <div class="mini">
-        <div class="mini__title">Today</div>
-        <div class="mini__row">
-          <div class="mini__k">New</div><div class="mini__v">6</div>
-        </div>
-        <div class="mini__row">
-          <div class="mini__k">Updated</div><div class="mini__v">14</div>
-        </div>
-        <div class="mini__row">
-          <div class="mini__k">Closed</div><div class="mini__v">2</div>
-        </div>
-      </div>
-    </mat-card>
   </div>
 </div>

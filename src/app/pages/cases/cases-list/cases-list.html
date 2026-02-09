@@ -1,101 +1,67 @@
-<div class="wrap">
-  <div class="head">
-    <div>
-      <h1>Cases</h1>
-      <p class="muted">Search, filter, and manage reports</p>
-    </div>
-
-    <a mat-raised-button color="primary" routerLink="/cases/new">
-      <mat-icon>add</mat-icon>
-      New Case
-    </a>
+<div class="cases-container">
+  <div class="header">
+    <h1>Case Management</h1>
+    <button mat-flat-button color="primary" routerLink="/cases/new">
+      <mat-icon>add</mat-icon> New Case
+    </button>
   </div>
 
-  <mat-card class="card">
-    <div class="filters">
-      <mat-form-field appearance="outline" class="wide">
-        <mat-label>Search</mat-label>
-        <mat-icon matPrefix>search</mat-icon>
-        <input matInput [formControl]="q" placeholder="Case ID, title, type, area..." />
-      </mat-form-field>
+  <div *ngIf="isLoading" class="loading-shade">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
-        <mat-select [formControl]="status">
-          <mat-option value="ALL">All</mat-option>
-          <mat-option value="OPEN">OPEN</mat-option>
-          <mat-option value="UNDER_INVESTIGATION">UNDER_INVESTIGATION</mat-option>
-          <mat-option value="CLOSED">CLOSED</mat-option>
-          <mat-option value="ARCHIVED">ARCHIVED</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+  <table mat-table [dataSource]="data" class="mat-elevation-z0" *ngIf="!isLoading">
+    
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> Case ID </th>
+      <td mat-cell *matCellDef="let case"> #{{case.id}} </td>
+    </ng-container>
 
-    <div class="tableWrap">
-      <table mat-table [dataSource]="filtered" class="mat-elevation-z0 table">
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <td mat-cell *matCellDef="let case"> 
+        <strong>{{case.title}}</strong>
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>Case ID</th>
-          <td mat-cell *matCellDef="let r">
-            <a class="link" [routerLink]="['/cases', r.id]">{{ r.id }}</a>
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef> Location </th>
+      <td mat-cell *matCellDef="let case"> {{case.location}} </td>
+    </ng-container>
 
-        <ng-container matColumnDef="title">
-          <th mat-header-cell *matHeaderCellDef>Title</th>
-          <td mat-cell *matCellDef="let r">
-            <div class="titleCell">
-              <div class="titleText">{{ r.title }}</div>
-              <div class="sub muted">{{ r.type }}</div>
-            </div>
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="officer">
+      <th mat-header-cell *matHeaderCellDef> Officer </th>
+      <td mat-cell *matCellDef="let case"> 
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <mat-icon style="font-size: 18px; width: 18px;">person</mat-icon>
+          {{case.officer_assigned || 'Unassigned'}}
+        </div>
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef>Type</th>
-          <td mat-cell *matCellDef="let r">{{ r.type }}</td>
-        </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let case">
+        <span [style.color]="case.status === 'OPEN' ? 'red' : 'green'" style="font-weight: bold;">
+          {{case.status}}
+        </span>
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let r">
-            <span [class]="badgeClass(r.status)">{{ r.status }}</span>
-          </td>
-        </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let case">
+        <button mat-icon-button color="primary" [routerLink]="['/cases', case.id, 'edit']">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="priority">
-          <th mat-header-cell *matHeaderCellDef>Priority</th>
-          <td mat-cell *matCellDef="let r">
-            <span class="prio">{{ priorityLabel(r.priority) }}</span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="area">
-          <th mat-header-cell *matHeaderCellDef>Area</th>
-          <td mat-cell *matCellDef="let r">{{ r.area }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="occurredAt">
-          <th mat-header-cell *matHeaderCellDef>Date</th>
-          <td mat-cell *matCellDef="let r">{{ r.occurredAt }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let r" class="actions">
-            <a mat-button [routerLink]="['/cases', r.id]">View</a>
-            <a mat-button [routerLink]="['/cases', r.id, 'edit']">Edit</a>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="columns"></tr>
-        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
-      </table>
-
-      <div class="empty" *ngIf="filtered.length === 0">
-        <div class="emptyTitle">No results</div>
-        <div class="muted">Try a different search or filter.</div>
-      </div>
-    </div>
-  </mat-card>
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+  </table>
+  
+  <div *ngIf="!isLoading && data.length === 0" style="padding: 20px; text-align: center; color: gray;">
+    No cases found. Create one to get started.
+  </div>
 </div>

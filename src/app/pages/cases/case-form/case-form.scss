@@ -1,20 +1,77 @@
-.card { padding: 16px; border-radius: 16px; }
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
 }
 
-.wide { grid-column: span 2; }
-
-.actions {
+// Header
+.page-header {
   display: flex;
-  gap: 10px;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    color: #181c32;
+  }
+
+  .page-subtitle {
+    margin: 0;
+    color: #b5b5c3;
+    font-size: 14px;
+  }
+
+  .cancel-btn {
+    color: #7e8299;
+  }
 }
 
-@media (max-width: 900px) {
-  .grid { grid-template-columns: 1fr; }
-  .wide { grid-column: span 1; }
+// Card Styling
+.form-card {
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px 0 rgba(76, 87, 125, 0.02);
+  background: #ffffff;
+}
+
+// Grid Layout for inputs
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+    
+    // Make title span full width
+    .full-width {
+      grid-column: span 2;
+    }
+  }
+}
+
+// Field Spacing
+.full-width {
+  width: 100%;
+}
+
+.mt-2 {
+  margin-top: 16px;
+}
+
+// Action Buttons
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #f3f6f9;
+
+  button {
+    min-width: 100px;
+  }
 }
