@@ -198,7 +198,7 @@ $color-closed: #10b981; // Green
   }
 }
 
-// Status Badges
+// Status Badges - UPDATED SECTION
 .status-badge {
   padding: 4px 12px;
   border-radius: 20px;
@@ -208,18 +208,24 @@ $color-closed: #10b981; // Green
   letter-spacing: 0.5px;
 
   &.OPEN {
-    background-color: fade-out($color-open, 0.85);
-    color: darken($color-open, 10%);
+    // Changed from fade-out($color-open, 0.85) to rgba()
+    background-color: rgba($color-open, 0.15); // 1 - 0.85 = 0.15
+    // Changed from darken($color-open, 10%) to adjust-color()
+    color: adjust-color($color-open, $lightness: -10%);
   }
 
   &.UNDER_INVESTIGATION {
-    background-color: fade-out($color-investigation, 0.85);
-    color: darken($color-investigation, 15%);
+    // Changed from fade-out($color-investigation, 0.85) to rgba()
+    background-color: rgba($color-investigation, 0.15);
+    // Changed from darken($color-investigation, 15%) to adjust-color()
+    color: adjust-color($color-investigation, $lightness: -15%);
   }
 
   &.CLOSED {
-    background-color: fade-out($color-closed, 0.85);
-    color: darken($color-closed, 10%);
+    // Changed from fade-out($color-closed, 0.85) to rgba()
+    background-color: rgba($color-closed, 0.15);
+    // Changed from darken($color-closed, 10%) to adjust-color()
+    color: adjust-color($color-closed, $lightness: -10%);
   }
 }
 

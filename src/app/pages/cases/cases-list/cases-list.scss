@@ -1,4 +1,6 @@
-// Variables for consistent colors
+// src/app/pages/cases/cases-list/cases-list.scss
+
+// Variables
 $primary-color: #3f51b5;
 $bg-color: #f5f7fa;
 $text-color: #333;
@@ -14,6 +16,9 @@ $muted-color: #666;
 .cases-container {
   max-width: 1200px;
   margin: 0 auto;
+  // --- FIX 1: Add relative positioning and min-height ---
+  position: relative; 
+  min-height: 400px; // Prevents collapse when table is hidden
   animation: fadeIn 0.4s ease-in-out;
 }
 
@@ -47,11 +52,12 @@ $muted-color: #666;
   bottom: 0;
   right: 0;
   background: rgba(255, 255, 255, 0.7);
-  z-index: 10;
+  z-index: 50; // Increased z-index
   display: flex;
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(2px);
+  border-radius: 8px; // Matches table radius
 }
 
 // --- Table Styles ---
@@ -59,7 +65,7 @@ table {
   width: 100%;
   background: white;
   border-radius: 8px;
-  overflow: hidden; // Keeps corners rounded
+  overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
   // Header Styling
@@ -81,7 +87,6 @@ table {
     border-bottom: 1px solid #f0f0f0;
     vertical-align: middle;
 
-    // Specific Column Tweaks
     &.mat-column-id {
       font-family: 'Roboto Mono', monospace;
       color: $muted-color;
@@ -99,19 +104,16 @@ table {
     }
   }
 
-  // Row Hover Effect
   tr.mat-row {
     transition: background-color 0.2s ease;
     cursor: pointer;
-
     &:hover {
-      background-color: #f9faff; // Light blue tint on hover
+      background-color: #f9faff;
     }
   }
 }
 
 // --- Status Badges ---
-// We target the span inside the status column
 .mat-column-status span {
   display: inline-block;
   padding: 4px 12px;
@@ -124,39 +126,19 @@ table {
   text-align: center;
 }
 
-// Dynamic styles based on text color injected in HTML
-// (This is a fallback if you want CSS-only control)
-span[style*="red"] {
-  background-color: rgba(244, 67, 54, 0.1);
-  color: #d32f2f !important;
-}
-
-span[style*="green"] {
-  background-color: rgba(76, 175, 80, 0.1);
-  color: #388e3c !important;
-}
-
 // --- Animations ---
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-// --- Responsive Design ---
+// --- Responsive ---
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
-    
-    button {
-      width: 100%;
-    }
+    button { width: 100%; }
   }
-
-  // Hide less important columns on mobile
-  .mat-column-location, 
-  .mat-column-officer {
-    display: none;
-  }
+  .mat-column-location, .mat-column-officer { display: none; }
 }

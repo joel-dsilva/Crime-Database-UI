@@ -1,10 +1,10 @@
 import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
-import { provideServerRendering } from '@angular/platform-server'; // ✅ CORRECT IMPORT
+import { provideServerRendering } from '@angular/platform-server'; // <--- THIS IS CRITICAL
 import { appConfig } from './app.config';
 
 const serverConfig: ApplicationConfig = {
   providers: [
-    provideServerRendering() // ✅ This provides the "Platform" context required
+    provideServerRendering() // <--- THIS FIXES THE NG0401 ERROR
   ]
 };
 

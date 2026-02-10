@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; // ✅ 1. Import ChangeDetectorRef
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router'; // ✅ Import Router
+import { Router, RouterLink } from '@angular/router';
 
 // Material Imports
 import { MatCardModule } from '@angular/material/card';
@@ -32,7 +32,8 @@ export class Dashboard implements OnInit {
 
   constructor(
     private api: ApiService,
-    private router: Router // ✅ Inject Router here
+    private router: Router,
+    private cdr: ChangeDetectorRef // ✅ 2. Inject ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -41,6 +42,7 @@ export class Dashboard implements OnInit {
 
   async loadData() {
     try {
+      this.isLoading = true;
       const data: any[] = await this.api.getCases();
       
       // Update Stats
@@ -52,19 +54,22 @@ export class Dashboard implements OnInit {
       // Update Table (Top 5 only)
       this.recentCases = data.slice(0, 5);
 
+      // ✅ 3. Force Angular to repaint the screen with new stats
+      this.cdr.detectChanges(); 
+
     } catch (error) {
       console.error('Error loading dashboard:', error);
     } finally {
       this.isLoading = false;
+      this.cdr.detectChanges(); // ✅ Ensure spinner disappears immediately
     }
   }
 
-  // ✅ The Missing Function: Navigates to the Edit Page
- // ✅ Accepts string, number, or undefined to fix the template error
-editCase(id: string | number | undefined) {
-  if (!id) return; // Guard against undefined IDs
-  this.router.navigate(['/cases', String(id), 'edit']);
-}
+  // Navigates to the Edit Page
+  editCase(id: string | number | undefined) {
+    if (!id) return;
+    this.router.navigate(['/cases', String(id), 'edit']);
+  }
 
   // Helper for status colors
   getStatusColor(status: string): string {

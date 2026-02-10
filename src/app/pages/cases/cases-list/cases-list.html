@@ -7,7 +7,7 @@
   </div>
 
   <div *ngIf="isLoading" class="loading-shade">
-    <mat-spinner diameter="40"></mat-spinner>
+    <mat-spinner diameter="50"></mat-spinner>
   </div>
 
   <table mat-table [dataSource]="data" class="mat-elevation-z0" *ngIf="!isLoading">
@@ -33,7 +33,7 @@
       <th mat-header-cell *matHeaderCellDef> Officer </th>
       <td mat-cell *matCellDef="let case"> 
         <div style="display: flex; align-items: center; gap: 8px;">
-          <mat-icon style="font-size: 18px; width: 18px;">person</mat-icon>
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px;">person</mat-icon>
           {{case.officer_assigned || 'Unassigned'}}
         </div>
       </td>
@@ -42,7 +42,8 @@
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef> Status </th>
       <td mat-cell *matCellDef="let case">
-        <span [style.color]="case.status === 'OPEN' ? 'red' : 'green'" style="font-weight: bold;">
+        <span [style.color]="case.status === 'OPEN' ? '#d32f2f' : '#388e3c'" 
+              [style.background-color]="case.status === 'OPEN' ? 'rgba(244, 67, 54, 0.1)' : 'rgba(76, 175, 80, 0.1)'">
           {{case.status}}
         </span>
       </td>
@@ -57,11 +58,12 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr mat-header-row *matHeaderRowDef="['id', 'title', 'location', 'officer', 'status', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id', 'title', 'location', 'officer', 'status', 'actions'];"></tr>
   </table>
   
-  <div *ngIf="!isLoading && data.length === 0" style="padding: 20px; text-align: center; color: gray;">
-    No cases found. Create one to get started.
+  <div *ngIf="!isLoading && data.length === 0" style="padding: 40px; text-align: center; color: gray;">
+    <mat-icon style="font-size: 48px; width: 48px; height: 48px; opacity: 0.5;">folder_off</mat-icon>
+    <p style="margin-top: 10px;">No cases found. Create one to get started.</p>
   </div>
 </div>
