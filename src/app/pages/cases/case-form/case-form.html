@@ -7,7 +7,6 @@
         {{ isEditMode ? 'Update incident details and status.' : 'Register a new criminal incident into the database.' }}
       </p>
     </div>
-    
     <a mat-button routerLink="/cases" class="cancel-btn">
       <mat-icon>close</mat-icon> Cancel
     </a>
@@ -15,46 +14,84 @@
 
   <mat-card class="form-card">
     <form (ngSubmit)="onSubmit()" #caseForm="ngForm">
-      
+
       <div class="form-grid">
+
+        <!-- Incident Title - full width -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Incident Title</mat-label>
-          <input matInput placeholder="e.g. Vehicle Theft at Market" [(ngModel)]="formData.title" name="title" required>
+          <input matInput placeholder="Brief Title"
+                 [(ngModel)]="formData.title" name="title" required>
           <mat-icon matSuffix>title</mat-icon>
         </mat-form-field>
 
+        <!-- Location -->
         <mat-form-field appearance="outline">
-          <mat-label>Location / Area</mat-label>
-          <input matInput placeholder="e.g. Panaji" [(ngModel)]="formData.location" name="location" required>
+          <mat-label>Location</mat-label>
+          <input matInput placeholder="City/Town/Village" 
+                 [(ngModel)]="formData.location" name="location" required>
           <mat-icon matSuffix>place</mat-icon>
         </mat-form-field>
 
+        <!-- Status -->
         <mat-form-field appearance="outline">
           <mat-label>Current Status</mat-label>
           <mat-select [(ngModel)]="formData.status" name="status" required>
-            <mat-option value="OPEN">Open</mat-option>
-            <mat-option value="UNDER_INVESTIGATION">Under Investigation</mat-option>
-            <mat-option value="CLOSED">Closed</mat-option>
+            <mat-option value="Open">Open</mat-option>
+            <mat-option value="Under Investigation">Under Investigation</mat-option>
+            <mat-option value="Pending Trial">Pending Trial</mat-option>
+            <mat-option value="Closed">Closed</mat-option>
           </mat-select>
-          <mat-icon matSuffix>info</mat-icon>
         </mat-form-field>
 
+        <!-- Assigned Officer - dropdown from DB -->
         <mat-form-field appearance="outline">
           <mat-label>Assigned Officer</mat-label>
-          <input matInput placeholder="e.g. Det. J. Silva" [(ngModel)]="formData.officer_assigned" name="officer">
+          <mat-select [(ngModel)]="formData.officer_id" name="officer_id" required>
+            <mat-option *ngIf="isLoadingDropdowns" disabled>Loading officers...</mat-option>
+            <mat-option *ngFor="let o of officers" [value]="o.officer_id">
+              {{ o.full_name }} ({{ o.rank }})
+            </mat-option>
+          </mat-select>
           <mat-icon matSuffix>badge</mat-icon>
         </mat-form-field>
+
+        <!-- Crime Type -->
+        <mat-form-field appearance="outline">
+          <mat-label>Crime Type</mat-label>
+          <mat-select [(ngModel)]="formData.crime_type" name="crime_type" required>
+            <mat-option *ngFor="let type of crimeTypes" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>gavel</mat-icon>
+        </mat-form-field>
+
+        <!-- Severity -->
+        <mat-form-field appearance="outline">
+          <mat-label>Severity</mat-label>
+          <mat-select [(ngModel)]="formData.severity" name="severity" required>
+            <mat-option value="Low">Low</mat-option>
+            <mat-option value="Medium">Medium</mat-option>
+            <mat-option value="High">High</mat-option>
+          </mat-select>
+          <mat-icon matSuffix>warning</mat-icon>
+        </mat-form-field>
+
       </div>
 
+      <!-- Incident Description - full width -->
       <mat-form-field appearance="outline" class="full-width mt-2">
         <mat-label>Incident Description</mat-label>
-        <textarea matInput rows="6" placeholder="Detailed report of the incident..." [(ngModel)]="formData.description" name="description"></textarea>
+        <textarea matInput rows="6" 
+                  placeholder="Detailed report of the incident..." 
+                  [(ngModel)]="formData.description" name="description"></textarea>
       </mat-form-field>
 
       <div class="form-actions">
         <button type="button" mat-stroked-button routerLink="/cases">Discard</button>
-        
-        <button mat-raised-button color="primary" type="submit" [disabled]="!caseForm.form.valid || isLoading">
+        <button mat-raised-button color="primary" type="submit" 
+                [disabled]="!caseForm.form.valid || isLoading || isLoadingDropdowns">
           <mat-icon>{{ isEditMode ? 'save' : 'add_circle' }}</mat-icon>
           {{ isEditMode ? 'Save Changes' : 'Create Record' }}
         </button>

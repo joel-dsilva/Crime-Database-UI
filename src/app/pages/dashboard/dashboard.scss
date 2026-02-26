@@ -199,6 +199,7 @@ $color-closed: #10b981; // Green
 }
 
 // Status Badges - UPDATED SECTION
+// Status Badges - FIXED FOR LOWERCASE
 .status-badge {
   padding: 4px 12px;
   border-radius: 20px;
@@ -207,24 +208,24 @@ $color-closed: #10b981; // Green
   text-transform: uppercase;
   letter-spacing: 0.5px;
 
-  &.OPEN {
-    // Changed from fade-out($color-open, 0.85) to rgba()
-    background-color: rgba($color-open, 0.15); // 1 - 0.85 = 0.15
-    // Changed from darken($color-open, 10%) to adjust-color()
+  // Change .OPEN to .open
+  &.open {
+    background-color: rgba($color-open, 0.15);
     color: adjust-color($color-open, $lightness: -10%);
   }
-
-  &.UNDER_INVESTIGATION {
-    // Changed from fade-out($color-investigation, 0.85) to rgba()
+  &.pending-trial {
+    background-color: rgba(99, 102, 241, 0.15);
+    color: #4338ca;
+  }
+  // Change .UNDER_INVESTIGATION to .under-investigation
+  &.under-investigation, &.investigating, &.active {
     background-color: rgba($color-investigation, 0.15);
-    // Changed from darken($color-investigation, 15%) to adjust-color()
     color: adjust-color($color-investigation, $lightness: -15%);
   }
 
-  &.CLOSED {
-    // Changed from fade-out($color-closed, 0.85) to rgba()
+  // Change .CLOSED to .closed
+  &.closed {
     background-color: rgba($color-closed, 0.15);
-    // Changed from darken($color-closed, 10%) to adjust-color()
     color: adjust-color($color-closed, $lightness: -10%);
   }
 }

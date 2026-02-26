@@ -1,0 +1,62 @@
+// Reuse same styling as cases-list
+$primary-color: #3f51b5;
+$bg-color: #f5f7fa;
+$text-color: #333;
+$muted-color: #666;
+
+:host {
+  display: block;
+  background-color: $bg-color;
+  min-height: 100%;
+  padding: 24px;
+}
+
+.cases-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  min-height: 400px;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  h1 { font-size: 28px; font-weight: 500; color: $text-color; margin: 0; }
+}
+
+.loading-shade {
+  position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+  background: rgba(255,255,255,0.7); z-index: 50;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(2px); border-radius: 8px;
+}
+
+table {
+  width: 100%; background: white; border-radius: 8px;
+  overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+
+  th.mat-header-cell {
+    background-color: #fafafa; color: $muted-color;
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    padding: 16px; border-bottom: 2px solid #eee;
+  }
+
+  td.mat-cell {
+    padding: 16px; color: $text-color; font-size: 14px;
+    border-bottom: 1px solid #f0f0f0; vertical-align: middle;
+    &.mat-column-id { font-family: 'Roboto Mono', monospace; color: $muted-color; width: 80px; }
+    &.mat-column-name { font-weight: 500; color: #1a1a1a; }
+  }
+
+  tr.mat-row { transition: background-color 0.2s ease; cursor: pointer;
+    &:hover { background-color: #f9faff; }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

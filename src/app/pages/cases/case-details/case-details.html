@@ -1,69 +1,83 @@
-<div class="details-container">
+<div class="details-container" style="padding: 20px;">
   
   <div *ngIf="isLoading" class="loading-shade">
     <mat-spinner diameter="40"></mat-spinner>
   </div>
 
   <div *ngIf="!isLoading && case" class="content-fade-in">
-    <header class="page-header">
+    <header class="page-header" style="margin-bottom: 20px; display: flex; justify-content: space-between;">
       <div class="title-group">
-        <div class="breadcrumb">
-          <a routerLink="/cases">Cases</a> / <span>{{case.id}}</span>
+        <div class="breadcrumb" style="color: gray; margin-bottom: 5px;">
+          <a routerLink="/dashboard" style="text-decoration: none; color: inherit;">Dashboard</a> / <span>#{{case.case_id}}</span>
         </div>
-        <h1>{{ case.title }}</h1>
+        <h1 style="margin: 0; font-size: 24px;">{{ case.case_title }}</h1>
       </div>
-
-      <div class="actions">
-        <button mat-stroked-button routerLink="/cases">
-          Back
-        </button>
-        <button mat-flat-button color="primary" [routerLink]="['/cases', case.id, 'edit']">
-          <mat-icon>edit</mat-icon> Edit Case
-        </button>
-      </div>
+      <button mat-stroked-button routerLink="/dashboard">Back</button>
     </header>
 
-    <div class="details-grid">
-      <mat-card class="main-card">
+    <div class="details-grid" style="display: grid; gap: 20px;">
+      
+      <mat-card>
         <mat-card-header>
-          <mat-card-title>Case Information</mat-card-title>
-          <div class="status-badge" [ngClass]="case.status.toLowerCase()">
-            {{ case.status }}
+          <mat-card-title>Case Overview</mat-card-title>
+          <div class="status-badge" [ngClass]="case.case_status?.toLowerCase().split(' ').join('-')" 
+               style="margin-left: auto; padding: 5px 15px; border-radius: 15px; font-weight: bold;">
+            {{ case.case_status }}
           </div>
         </mat-card-header>
-        
         <mat-divider></mat-divider>
-        
-        <mat-card-content>
-          <div class="info-row">
-            <div class="label">Location</div>
-            <div class="value">{{ case.location }}</div>
-          </div>
+        <mat-card-content style="padding-top: 15px;">
           
-          <div class="info-row">
-            <div class="label">Assigned Officer</div>
-            <div class="value officer-value">
-              <mat-icon inline>person</mat-icon> 
-              {{ case.officer_assigned || 'Unassigned' }}
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+              <strong>Date Opened:</strong>
+              <p>{{ case.open_date | date:'mediumDate' }}</p>
+            </div>
+            <div>
+              <strong>Location:</strong>
+              <p>{{ case.crime?.location }}</p>
+            </div>
+            <div>
+              <strong>Assigned Officer:</strong>
+              <p>{{ case.officer?.full_name }} ({{ case.officer?.rank }})</p>
+            </div>
+            <div>
+              <strong>Crime Type:</strong>
+              <p>{{ case.crime?.crime_type }} - {{ case.crime?.severity }}</p>
             </div>
           </div>
 
-          <div class="info-row">
-            <div class="label">Reported Date</div>
-            <div class="value">{{ case.created_at | date:'mediumDate' }}</div>
-          </div>
-
-          <div class="description-section">
-            <div class="label">Description</div>
-            <p class="description-text">{{ case.description }}</p>
-          </div>
         </mat-card-content>
       </mat-card>
-    </div>
-  </div>
 
-  <div *ngIf="!isLoading && !case" class="empty-state">
-    <h3>Case not found</h3>
-    <button mat-button routerLink="/cases">Go back to list</button>
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        
+        <mat-tab label="Suspects ({{case.suspect?.length || 0}})">
+          <div style="padding-top: 20px;">
+            <div *ngFor="let s of case.suspect" style="background: white; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;">
+              <h3 style="margin: 0;">{{ s.full_name }}</h3>
+              <p style="margin: 5px 0; color: gray;">Aliases: {{ s.aliases || 'None' }}</p>
+              <small>Gender: {{ s.gender }} | Address: {{ s.address }}</small>
+            </div>
+            <p *ngIf="!case.suspect?.length">No suspects recorded.</p>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Evidence ({{case.evidence?.length || 0}})">
+          <div style="padding-top: 20px;">
+            <div *ngFor="let e of case.evidence" style="background: white; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;">
+              <div style="display: flex; justify-content: space-between;">
+                <strong>{{ e.evidence_type }}</strong>
+                <span style="font-size: 12px; background: #e0f2f1; padding: 2px 8px; border-radius: 4px;">{{ e.status }}</span>
+              </div>
+              <p>{{ e.description }}</p>
+              <small>Format: {{ e.format }} | Date: {{ e.date_provided | date:'shortDate' }}</small>
+            </div>
+            <p *ngIf="!case.evidence?.length">No evidence recorded.</p>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
   </div>
 </div>

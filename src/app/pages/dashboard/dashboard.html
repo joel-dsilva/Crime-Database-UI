@@ -1,5 +1,4 @@
 <div class="dashboard-container">
-  
   <header class="page-header">
     <div class="header-content">
       <h1>Dashboard</h1>
@@ -13,49 +12,27 @@
 
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-header">
-        <span class="stat-label">Total cases</span>
-      </div>
+      <div class="stat-header"><span class="stat-label">Total cases</span></div>
       <div class="stat-value">{{ stats.total }}</div>
-      <div class="stat-desc">All cases in the system</div>
     </div>
-
     <div class="stat-card">
-      <div class="stat-header">
-        <span class="stat-label">Open</span>
-        <div class="status-dot open"></div>
-      </div>
+      <div class="stat-header"><span class="stat-label">Open</span></div>
       <div class="stat-value">{{ stats.open }}</div>
-      <div class="stat-desc">Needs assignment / triage</div>
     </div>
-
     <div class="stat-card">
-      <div class="stat-header">
-        <span class="stat-label">Under investigation</span>
-        <div class="status-dot investigation"></div>
-      </div>
-    <div class="stat-value">{{ stats.investigating }}</div>
-      <div class="stat-desc">Active work in progress</div>
+      <div class="stat-header"><span class="stat-label">Active</span></div>
+      <div class="stat-value">{{ stats.active }}</div>
     </div>
-
     <div class="stat-card">
-      <div class="stat-header">
-        <span class="stat-label">Closed</span>
-        <div class="status-dot closed"></div>
-      </div>
+      <div class="stat-header"><span class="stat-label">Closed</span></div>
       <div class="stat-value">{{ stats.closed }}</div>
-      <div class="stat-desc">Resolved & archived</div>
     </div>
   </div>
 
   <div class="content-grid">
-    
     <div class="recent-section">
       <div class="section-header">
-        <div>
-          <h2>Recent cases</h2>
-          <p>Latest reports and updates</p>
-        </div>
+        <h2>Recent cases</h2>
         <a routerLink="/cases" class="link-btn">Open list</a>
       </div>
 
@@ -64,16 +41,16 @@
           <mat-spinner diameter="30"></mat-spinner>
         </div>
 
-          <div class="case-item" *ngFor="let case of recentCases" (click)="editCase(case.id || '')" style="cursor: pointer;">          <div class="case-info">
-            <span class="case-id">C-{{ case.id }}</span>
-            <span class="case-title">{{ case.title }}</span>
+        <div class="case-item" *ngFor="let c of recentCases" (click)="editCase(c.case_id)" style="cursor: pointer;">
+          <div class="case-info">
+            <span class="case-id">#{{ c.case_id }}</span>
+            <span class="case-title">{{ c.case_title }}</span>
           </div>
-          
           <div class="case-meta">
-            <span class="status-badge" [ngClass]="case.status">
-              {{ case.status.replace('_', ' ') }}
+            <span class="status-badge" [ngClass]="c.case_status ? c.case_status.toLowerCase().split(' ').join('-') : ''">
+              {{ c.case_status }}
             </span>
-            <span class="case-location">{{ case.location }}</span>
+            <span class="case-location">{{ c.crime?.location || 'Unknown Location' }}</span>
           </div>
         </div>
 
@@ -82,32 +59,5 @@
         </div>
       </div>
     </div>
-
-    <div class="actions-section">
-      <div class="section-header">
-        <div>
-          <h2>Quick actions</h2>
-          <p>Common operations</p>
-        </div>
-      </div>
-
-      <div class="action-list">
-        <div class="action-card" routerLink="/cases/new">
-          <h3>Create a new case</h3>
-          <p>Register an incident report</p>
-        </div>
-
-        <div class="action-card" routerLink="/cases">
-          <h3>Search cases</h3>
-          <p>Filter by status/area/type</p>
-        </div>
-
-        <div class="action-card disabled">
-          <h3>Generate report</h3>
-          <p>Coming after API integration</p>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>

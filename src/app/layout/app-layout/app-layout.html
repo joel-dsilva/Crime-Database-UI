@@ -13,7 +13,6 @@
     </div>
 
     <nav class="sidebar-nav">
-      
       <div class="nav-section">
         <span class="section-label" *ngIf="isSidebarOpen">MENU</span>
         
@@ -21,12 +20,22 @@
           <mat-icon>grid_view</mat-icon>
           <span *ngIf="isSidebarOpen">Dashboard</span>
         </a>
-
         <a routerLink="/cases" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
           <mat-icon>folder_open</mat-icon>
           <span *ngIf="isSidebarOpen">Case Files</span>
         </a>
-
+        <a routerLink="/officers" routerLinkActive="active" class="nav-link">
+          <mat-icon>badge</mat-icon>
+          <span *ngIf="isSidebarOpen">Officers</span>
+        </a>
+        <a routerLink="/suspects" routerLinkActive="active" class="nav-link">
+          <mat-icon>person_search</mat-icon>
+          <span *ngIf="isSidebarOpen">Suspects</span>
+        </a>
+        <a routerLink="/crimes" routerLinkActive="active" class="nav-link">
+          <mat-icon>gavel</mat-icon>
+          <span *ngIf="isSidebarOpen">Crimes</span>
+        </a>
         <a routerLink="/cases/new" routerLinkActive="active" class="nav-link">
           <mat-icon>add_box</mat-icon>
           <span *ngIf="isSidebarOpen">New Report</span>
@@ -38,13 +47,11 @@
           <mat-icon>settings</mat-icon>
           <span *ngIf="isSidebarOpen">Settings</span>
         </a>
-        
         <a routerLink="/login" class="nav-link logout">
           <mat-icon>logout</mat-icon>
           <span *ngIf="isSidebarOpen">Sign Out</span>
         </a>
       </div>
-
     </nav>
   </aside>
 
@@ -58,16 +65,93 @@
         <h2 class="page-title">Overview</h2>
       </div>
 
-      <div class="search-bar">
-        <mat-icon>search</mat-icon>
-        <input type="text" placeholder="Search for cases, suspects, or IDs...">
+      <!-- SEARCH BAR WITH DROPDOWN -->
+      <div class="search-wrapper">
+        <div class="search-bar">
+          <mat-icon>search</mat-icon>
+          <input
+            type="text"
+            placeholder="Search for cases, suspects, or IDs..."
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+            (focus)="onSearch()"
+          >
+          <mat-icon class="clear-icon" *ngIf="searchQuery" (click)="clearSearch()">close</mat-icon>
+        </div>
+
+        <!-- DROPDOWN RESULTS -->
+        <div class="search-dropdown" *ngIf="showDropdown">
+          
+          <div *ngIf="isSearching" class="search-loading">
+            <mat-spinner diameter="20"></mat-spinner>
+            <span>Searching...</span>
+          </div>
+
+          <ng-container *ngIf="!isSearching">
+
+            <!-- CASES -->
+            <div *ngIf="results.cases.length > 0" class="result-group">
+              <div class="result-group-label">Cases</div>
+              <div class="result-item" *ngFor="let c of results.cases" (click)="navigateTo('/cases/' + c.case_id)">
+                <mat-icon>folder_open</mat-icon>
+                <div class="result-info">
+                  <span class="result-title">{{ c.case_title }}</span>
+                  <span class="result-sub">#{{ c.case_id }} · {{ c.case_status }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUSPECTS -->
+            <div *ngIf="results.suspects.length > 0" class="result-group">
+              <div class="result-group-label">Suspects</div>
+              <div class="result-item" *ngFor="let s of results.suspects" (click)="navigateTo('/suspects')">
+                <mat-icon>person_search</mat-icon>
+                <div class="result-info">
+                  <span class="result-title">{{ s.full_name }}</span>
+                  <span class="result-sub">Case #{{ s.case_id }} · {{ s.gender }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- OFFICERS -->
+            <div *ngIf="results.officers.length > 0" class="result-group">
+              <div class="result-group-label">Officers</div>
+              <div class="result-item" *ngFor="let o of results.officers" (click)="navigateTo('/officers')">
+                <mat-icon>badge</mat-icon>
+                <div class="result-info">
+                  <span class="result-title">{{ o.full_name }}</span>
+                  <span class="result-sub">{{ o.rank }} · {{ o.department }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CRIMES -->
+            <div *ngIf="results.crimes.length > 0" class="result-group">
+              <div class="result-group-label">Crimes</div>
+              <div class="result-item" *ngFor="let cr of results.crimes" (click)="navigateTo('/crimes')">
+                <mat-icon>gavel</mat-icon>
+                <div class="result-info">
+                  <span class="result-title">{{ cr.crime_type }}</span>
+                  <span class="result-sub">{{ cr.location }} · {{ cr.severity }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- NO RESULTS -->
+            <div class="no-results" 
+                 *ngIf="results.cases.length === 0 && results.suspects.length === 0 && results.officers.length === 0 && results.crimes.length === 0">
+              <mat-icon>search_off</mat-icon>
+              <span>No results for "{{ searchQuery }}"</span>
+            </div>
+
+          </ng-container>
+        </div>
       </div>
 
       <div class="right-actions">
         <button mat-icon-button>
           <mat-icon>notifications</mat-icon>
         </button>
-        
         <div class="user-profile">
           <div class="user-info">
             <span class="name">Det. J. Silva</span>

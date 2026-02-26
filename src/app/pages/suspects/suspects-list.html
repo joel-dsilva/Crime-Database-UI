@@ -1,0 +1,58 @@
+<div class="cases-container">
+  <div class="header">
+    <h1>Suspects</h1>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-shade">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <table mat-table [dataSource]="data" class="mat-elevation-z0" *ngIf="!isLoading">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>Person ID</th>
+      <td mat-cell *matCellDef="let s">#{{s.person_id}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Full Name</th>
+      <td mat-cell *matCellDef="let s"><strong>{{s.full_name}}</strong></td>
+    </ng-container>
+
+    <ng-container matColumnDef="gender">
+      <th mat-header-cell *matHeaderCellDef>Gender</th>
+      <td mat-cell *matCellDef="let s">{{s.gender}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="dob">
+      <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+      <td mat-cell *matCellDef="let s">{{s.dob | date:'mediumDate'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef>Address</th>
+      <td mat-cell *matCellDef="let s">{{s.address}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="aliases">
+      <th mat-header-cell *matHeaderCellDef>Aliases</th>
+      <td mat-cell *matCellDef="let s">{{s.aliases || 'None'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="case">
+      <th mat-header-cell *matHeaderCellDef>Case</th>
+      <td mat-cell *matCellDef="let s">
+        <span style="font-family: 'Roboto Mono', monospace; color: #666;">
+          #{{s.case_id}}
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+  </table>
+
+  <div *ngIf="!isLoading && data.length === 0" style="padding: 40px; text-align: center; color: gray;">
+    <p>No suspects found.</p>
+  </div>
+</div>
